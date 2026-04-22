@@ -12,16 +12,6 @@ public class StringProducerService {
     @Autowired
     private KafkaTemplate<String,String> kafkaTemplate;
 
-    public void sendMessage(String message){
-        kafkaTemplate.send("str-topic",message).whenComplete((result,ex) -> {
-           if(ex != null){
-               log.error("Error, al enviar el mensaje: {}",ex.getMessage());
-           }
-           log.info("Mensaje enviado con éxito: {}",result.getProducerRecord().value());
-           log.info("Particion {}, Offset {}", result.getRecordMetadata().partition(),result.getRecordMetadata().offset());
-        });
-    }
-
     // Patient Management - Partition 0: Patient Registration
     public void sendPatientRegistration(String message){
         kafkaTemplate.send("patient-management", 0, null, message).whenComplete((result,ex) -> {

@@ -26,8 +26,6 @@ public class KafkaAdminConfig {
     public KafkaAdmin.NewTopics topics(){
         return new KafkaAdmin.NewTopics(
                 
-                TopicBuilder.name("str-topic").partitions(2).replicas(1).build(),
-                
                 TopicBuilder.name("patient-management")
                     .partitions(3)
                     .replicas(1)

@@ -16,12 +16,6 @@ public class StringProducerResource {
     @Autowired
     private StringProducerService stringProducerService;
 
-    @PostMapping
-    public ResponseEntity<?> sendMessage(@RequestBody String message){
-        stringProducerService.sendMessage(message);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     // Patient Management endpoints
     @PostMapping("/patient/register")
     public ResponseEntity<?> registerPatient(@RequestBody String message){
