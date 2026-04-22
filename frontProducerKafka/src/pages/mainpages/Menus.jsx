@@ -1,10 +1,7 @@
-import React from 'react'
-import Producer from '../../components/Producer';
+import { Navigate } from "react-router-dom";
 
 function Menus() {
-    return (
-        <Producer/>
-    )
+    return <Navigate to="/visualizacion" replace />;
 }
 
-export default Menus
+export default Menus;

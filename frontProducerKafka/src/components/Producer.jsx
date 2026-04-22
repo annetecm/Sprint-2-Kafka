@@ -1,61 +1,111 @@
 import { useState } from "react";
 
-export default function Producer() {
-    const [message, setMessage] = useState("");
-    const [response, setResponse] = useState("");
+const API_BASE_URL = "http://localhost:8000";
 
-    const sendMessage = async () => {
-        const finalMessage = message + "menu";
+export default function Producer({ title, description, actions, placeholder }) {
+    const [formData, setFormData] = useState({});
+    const [status, setStatus] = useState("");
+    const [loadingAction, setLoadingAction] = useState("");
 
-        const res = await fetch(
-        `http://localhost:8000/producer/menu?message=${encodeURIComponent(finalMessage)}`
-        );
+    const handleFieldChange = (actionLabel, fieldName, value) => {
+        setFormData(prev => ({
+            ...prev,
+            [actionLabel]: {
+                ...(prev[actionLabel] || {}),
+                [fieldName]: value
+            }
+        }));
+    };
 
-        const data = await res.text();
+    const sendMessage = async (action) => {
+        const actionData = formData[action.label] || {};
+        
+        // Combine field values into a single message
+        const payload = action.fields
+            ? action.fields.map(f => actionData[f.name] || "").join(" | ")
+            : "";
 
-        setResponse(data);
-        setMessage("");
+        if (!payload.trim()) {
+            setStatus("Completa todos los campos antes de enviar.");
+            return;
+        }
+
+        setLoadingAction(action.label);
+        setStatus(`Enviando ${action.label.toLowerCase()}...`);
+
+        try {
+            const res = await fetch(`${API_BASE_URL}${action.endpoint}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain;charset=UTF-8"
+                },
+                body: payload
+            });
+
+            if (!res.ok) {
+                throw new Error(`Error ${res.status}`);
+            }
+
+            setStatus(`${action.successMessage} enviado al backend.`);
+            setFormData(prev => ({
+                ...prev,
+                [action.label]: {}
+            }));
+        } catch (error) {
+            setStatus(`No se pudo enviar el mensaje: ${error.message}`);
+        } finally {
+            setLoadingAction("");
+        }
     };
 
     return (
-        <div style={{ padding: 20 }}>
-        <h1>Kafka Producer</h1>
-
-        <input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Escribe mensaje (meat, vegan...)"
-            style={{
-            width: "300px",
-            padding: "12px",
-            fontSize: "16px",
-            marginRight: "10px",
-            borderRadius: "5px",
-            border: "1px solid #ccc"
-            }}
-        />
-
-        <button
-            onClick={sendMessage}
-            style={{
-            padding: "12px 20px",
-            fontSize: "16px",
-            backgroundColor: "#007bff",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer"
-            }}
-        >
-            Enviar a Kafka
-        </button>
-
-        {response && (
-            <div style={{ marginTop: "20px" }}>
-            <h3>Respuesta:</h3>
-            <p>{response}</p>
+        <section className="producer-card">
+            <div className="producer-header">
+                <h1>{title}</h1>
+                {description && <p>{description}</p>}
             </div>
-        )}
-        </div>
+
+            <div className="producer-actions-list">
+                {actions.map((action) => (
+                    <div key={action.label} className="producer-action-group">
+                        <h3 className="action-title">{action.label}</h3>
+                        
+                        {action.fields ? (
+                            <div className="action-fields">
+                                {action.fields.map((field) => (
+                                    <div key={field.name} className="field-group">
+                                        <label htmlFor={`${action.label}-${field.name}`} className="field-label">
+                                            {field.label}
+                                        </label>
+                                        <input
+                                            id={`${action.label}-${field.name}`}
+                                            type="text"
+                                            value={formData[action.label]?.[field.name] || ""}
+                                            onChange={(e) => handleFieldChange(action.label, field.name, e.target.value)}
+                                            placeholder={field.placeholder || ""}
+                                            className="field-input"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        ) : null}
+
+                        <button
+                            onClick={() => sendMessage(action)}
+                            className="producer-button"
+                            disabled={loadingAction === action.label}
+                        >
+                            {loadingAction === action.label ? "Enviando..." : action.label}
+                        </button>
+                    </div>
+                ))}
+            </div>
+
+            {status && (
+                <div className="producer-status">
+                    <p>{status}</p>
+                </div>
+            )}
+        </section>
     );
 }

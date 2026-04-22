@@ -1,9 +1,7 @@
-import React from 'react'
+import { Navigate } from "react-router-dom";
 
 function Clientes() {
-    return (
-        <h1> "Clientes :D" </h1>
-    )
+    return <Navigate to="/doctor" replace />;
 }
 
-export default Clientes
+export default Clientes;

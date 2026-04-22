@@ -1,9 +1,9 @@
-import React from 'react'
-
 function Home() {
     return (
-        <h1> "Bienvenido :D" </h1>
+        <section className="page-section">
+            <h1>¡Bienvenido a el Sistema de Gestión Médica!</h1>
+        </section>
     )
 }
 
-export default Home
+export default Home;
