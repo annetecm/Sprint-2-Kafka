@@ -1,6 +1,10 @@
 package com.lta.backend.listeners;
 
+import com.lta.backend.service.DeletePatient;
+import com.lta.backend.service.RegisterPatient;
+import com.lta.backend.service.UpdatePatient;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.stereotype.Component;
@@ -9,12 +13,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class PatientManagementListener {
 
+    @Autowired
+    private RegisterPatient registerPatient;
+    @Autowired
+    private UpdatePatient updatePatient;
+    @Autowired
+    private DeletePatient deletePatient;
+
     // Partition 0: Patient Registration
     @KafkaListener(groupId = "patient-group",
             topicPartitions = @TopicPartition(topic = "patient-management", partitions = {"0"}),
             containerFactory = "validMessageContainerFactory")
     public void listenPatientRegistration(String message) {
         log.info(" [REGISTRO DE PACIENTE] ::: {}", message);
+        registerPatient.registerPatient(message);
     }
 
     // Partition 1: Information Update
@@ -23,6 +35,7 @@ public class PatientManagementListener {
             containerFactory = "validMessageContainerFactory")
     public void listenPatientUpdate(String message) {
         log.info(" [ACTUALIZACIÓN DE PACIENTE] ::: {}", message);
+        updatePatient.updatePatient(message);
     }
 
     // Partition 2: Record Deletion
@@ -31,5 +44,6 @@ public class PatientManagementListener {
             containerFactory = "validMessageContainerFactory")
     public void listenPatientDeletion(String message) {
         log.info(" [ELIMINACIÓN DE PACIENTE] ::: {}", message);
+        deletePatient.deletePatient(message);
     }
 }
