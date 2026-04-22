@@ -5,12 +5,9 @@ function Navbar() {
     return (
     <nav className="navbar">
         <div className="nav-container">
-        <NavLink to="/" className="nav-link">Home</NavLink>
-        <NavLink to="/clientes" className="nav-link">Clientes</NavLink>
-        <NavLink to="/menus" className="nav-link">Menus</NavLink>
-        </div>
-        <div>
-        
+        <NavLink to="/" className="nav-link">Inicio</NavLink>
+        <NavLink to="/doctor" className="nav-link">Doctores</NavLink>
+        <NavLink to="/visualizacion" className="nav-link">Visualizacion</NavLink>
         </div>
     </nav>
     );

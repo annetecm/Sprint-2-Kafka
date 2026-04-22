@@ -1,32 +1,27 @@
-//Router:	Envuelve la aplicación y gestiona la navegación.
-//Routes:	Agrupa múltiples rutas y muestra solo la primera coincidencia.
-//Route:	Define una URL específica y qué componente renderizar.
-
-//Instala lo siguiente
-//npm install react-router-dom
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Clientes from "./pages/mainpages/Clientes";
-import Menus from "./pages/mainpages/Menus";
+import { BrowserRouter as Router, Navigate, Routes, Route } from "react-router-dom";
 import Navbar from "./pages/Navbar/Navbar";
-import Default from "./pages/mainpages/Default";
 import Home from "./pages/mainpages/Home";
+import Doctor from "./pages/mainpages/Doctor";
+import Visualization from "./pages/mainpages/Visualization";
+import Default from "./pages/mainpages/Default";
+import "./App.css";
 
 
 function App() {
   return (
     <Router>
-      <div className="app">
-        {/* Barra de navegación */}
+      <div className="app-shell">
         <Navbar />
-        {/* Contenido de la página */}
-        <div className="content">
+        <main className="content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/clientes" element={<Clientes />} />
-            <Route path="/menus" element={<Menus />} />
+            <Route path="/doctor" element={<Doctor />} />
+            <Route path="/visualizacion" element={<Visualization />} />
+            <Route path="/clientes" element={<Navigate to="/doctor" replace />} />
+            <Route path="/menus" element={<Navigate to="/visualizacion" replace />} />
             <Route path="*" element={<Default />} />
           </Routes>
-        </div>
+        </main>
       </div>
     </Router>
   );
