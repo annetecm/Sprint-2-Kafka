@@ -4,7 +4,7 @@ function Doctor() {
     return (
         <Producer
             title="Sistema para doctores"
-            description="Gestión de pacientes y citas. Todos los eventos se envían a Kafka y el consumer procesa las acciones."
+            description="Gestión de pacientes y citas. "
             actions={[
                 {
                     label: "Registrar paciente",
@@ -63,7 +63,7 @@ function Doctor() {
                     fields: [
                         { name: "appointment_id", label: "ID de la cita" },
                         { name: "name", label: "Nombre del paciente"},
-                        { name: "notes", label: "Notas", placeholder: "Ej: Motivo del cambio" }
+                        { name: "notes", label: "Notas"}
                     ]
                 }
             ]}

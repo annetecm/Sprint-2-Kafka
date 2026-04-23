@@ -3,8 +3,8 @@ import Producer from "../../components/Producer";
 function Visualization() {
     return (
         <Producer
-            title="Sistema de visualizacion"
-            description="Consulta de citas y estado de pacientes. Los datos viajan por Kafka y el consumer solo escribe en los logs."
+            title="Sistema de visualización"
+            description="Consulta de citas y estado de pacientes."
             actions={[
                 {
                     label: "Consultar estado",
