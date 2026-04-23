@@ -20,7 +20,7 @@ export default function Producer({ title, description, actions, placeholder }) {
     const sendMessage = async (action) => {
         const actionData = formData[action.label] || {};
         
-        // Combine field values into a single message
+        
         const payload = action.fields
             ? action.fields.map(f => actionData[f.name] || "").join(" | ")
             : "";
